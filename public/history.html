@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <a onclick="push('/a')">去a</a>
+    <a onclick="push('/b')">去b</a>
+    <script>
+        function push(e) {
+            console.log(e);
+            history.pushState(e, null, e)
+        }
+        window.addEventListener('popstate', (e) => {
+            console.log(e)
+            console.log(history)
+        })
+    </script>
+</body>
+
+</html>
