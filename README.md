@@ -1,7 +1,7 @@
 # react-router理解
 
 ### 1.  Provider和Consumer
-Provider和Comsumer是React提供的两个原生组件，Provider的value属性传递数据，Provider包裹内的所有Consumer都可以直接获取到Provider的数据
+`Provider`和`Comsume`r是`React`提供的两个原生组件，`Provider`的`value`属性传递数据，`Provider`包裹内的所有`Consumer`都可以直接获取到`Provider`的数据
 
 获取方法
 
@@ -26,10 +26,10 @@ let { Provider, Consumer } = React.createContext();
 
 ### 2. HashRouter 和 Route
 
-根据hash改变组件的步骤
-- HashRouter绑定hashchange事件，每次发生都会触发setState,并记录新的hash
-- 数据改变触发render函数，render一个Provider，并且将新数据(pathname)放到Provider的value属性上
-- Router作为Router的子组件，也会重新执行render，此时通过Consumer接受Provider提供的数据，并且比对Route自身传递的path属性和state里面的pathname,如果符合条件则返回Route属性传入的Component进行渲染，否则返回null不渲染
+根据`hash`改变组件的步骤
+- `HashRouter`绑定`hashchange`事件，每次发生都会触发`setState`,并记录新的`hash`
+- 数据改变触发`render`函数，`render`一个`Provider`，并且将新数据(`pathname`)放到`Provider`的`value`属性上
+- Router作为`Router`的子组件，也会重新执行`render`，此时通过`Consumer`接受`Provider`提供的数据，并且比对`Route`自身传递的`path`属性和`state`里面的`pathname`,如果符合条件则返回`Route`属性传入的`Component`进行渲染，否则返回`null`不渲染
 
 ```javascript
 /* index.jsx */
@@ -99,7 +99,7 @@ export default class Route extends React.Component {
 </div>
 ```
 实现步骤
-- 扩充HashRender通过Provider传递的方法，增加push方法强制改变hash
+- 扩充`HashRender`通过`Provider`传递的方法，增加`push`方法强制改变`hash`
 ```javascript
 /* 要传给Consumer使用的数据 */
 let value = {
@@ -111,7 +111,7 @@ let value = {
     }
 }
 ```
-- Link组件插入一个Consumer,返回值是一个a标签，点击触发HashRender提供的push方法
+- `Link`组件插入一个`Consumer`,返回值是一个`a`标签，点击触发`HashRender`提供的`push`方法
 ```javascript
 return (<Consumer>
     {state => {
@@ -131,8 +131,8 @@ return (<Consumer>
     <Route path="/user" component={User}></Route>
 </Switch>
 ```
-Switch实现每次只匹配一个组件的效果
-- 利用Consumer获取浏览器hash值
+`Switch`实现每次只匹配一个组件的效果
+- 利用`Consumer`获取浏览器`hash`值
 - 遍历孩子，遇到符合条件的直接停止遍历，不处理后面的子元素
 ```javascript
 return (<Consumer>
@@ -174,7 +174,7 @@ return (<Consumer>
 
 ### 6. 根据参数匹配页面
 
-match的作用是使组件可以通过类似`/home/:id`的方式传递数据，渲染出`id`相关数据
+`match`的作用是使组件可以通过类似`/home/:id`的方式传递数据，渲染出`id`相关数据
 
 ```javascript
 /* user.jsx */
@@ -206,7 +206,7 @@ return (
 )
 ```
 实现步骤：
-- 利用pathToRegexp函数解析对比可以得到key和values的映射关系
+- 利用`pathToRegexp`函数解析对比可以得到`key`和`values`的映射关系
 ```javascript
 let { pathToRegexp } = require('path-to-regexp')
 let keys = [];
@@ -217,7 +217,7 @@ let pathname = '/user/detail/111/bbb';
 let [url, ...values] = path.match(reg);
 console.log(values);//['111','bbb'];对应于['id','name']
 ```
-- 依据pathToRegexp规则修改Route类的render函数,将映射应用到params上，传递给子元素
+- 依据`pathToRegexp`规则修改`Route`类的`render`函数,将映射应用到`params`上，传递给子元素
 ```javascript
 /* Route.js */
 render() {
@@ -251,12 +251,12 @@ render() {
 }
 ```
 ##### 过程描述
-1. 假设`to="/user/detail/1/Amy"`，点击link标签，调用state传入的`state.history.push(to)`方法，改变`window.location.hash`
-2. 触发HashRouter的hashchange事件，改变HashRouter的state重新render包含的内容
+1. 假设`to="/user/detail/1/Amy"`，点击`link`标签，调用`state`传入的`state.history.push(to)`方法，改变`window.location.hash`
+2. 触发`HashRouter`的`hashchange`事件，改变`HashRouter`的`state`重新`render`包含的内容
 3. `App`组件的`Route`匹配到`/user`渲染`User`组件
 4. `User`组件的`Route`匹配到`/user/detail/:id/:name`,将`{id:'1',name:'Amy'}`放到`props.history.match`，再将整个`props`解构传给`userDetail`
 
 
 ## 7. 总结
-- HashRouter监听hash的改变并提供操作hash的方法，每次改变都会触发包裹的内部元素进行render,并使用Provider传递数据
-- Route、Link、Switch、Redirect都是使用Consumer接受HashRouter关于hash的数据和方法，利用这些数据与属性传入数据进行比对，从而确定是否渲染组件或者子组件
+- `HashRouter`监听`hash`的改变并提供操作`hash`的方法，每次改变都会触发包裹的内部元素进行`render`,并使用`Provider`传递数据
+- `Route、Link、Switch、Redirect`都是使用`Consumer`接受`HashRouter`关于`hash`的数据和方法，利用这些数据与属性传入数据进行比对，从而确定是否渲染组件或者子组件
